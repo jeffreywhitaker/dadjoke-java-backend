@@ -36,6 +36,55 @@ public class OpenController
     @Autowired
     private RoleService roleService;
 
+    // POST login existing user
+
+    @PostMapping(value = "/login", consumes = {"application/json"}, produces = {"application/json"})
+    public ResponseEntity<?> loginUser(HttpServletRequest httpServletRequest, @RequestParam(defaultValue = "true")
+                                                   boolean getaccess,
+                                       @Valid
+                                           @RequestBody
+                                                   UserMinimum newminuser) throws URISyntaxException
+    {
+        RestTemplate restTemplate = new RestTemplate();
+        String requestURI = "http://" + httpServletRequest.getServerName() + getPort(httpServletRequest) + "/oauth/login";
+
+        List<MediaType> acceptableMediaTypes = new ArrayList<>();
+        acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setAccept(acceptableMediaTypes);
+        headers.setBasicAuth(System.getenv("OAUTHCLIENTID"),
+                System.getenv("OAUTHCLIENTSECRET"));
+
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("grant_type",
+                "password");
+        map.add("scope",
+                "read write trust");
+        map.add("username",
+                newminuser.getUsername());
+        map.add("password",
+                newminuser.getPassword());
+
+        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,
+                headers);
+
+        logger.info("Requesting token from " + requestURI);
+
+        String theToken = "";
+        theToken = restTemplate.postForObject(requestURI,
+                request,
+                String.class);
+
+        return new ResponseEntity<>(theToken,
+                HttpStatus.OK);
+    }
+
+
+
+
+
     // Create the user and Return the access token
     // http://localhost:2019/createnewuser
     // Just create the user
@@ -76,7 +125,7 @@ public class OpenController
 
         // set the location header for the newly created resource - to another controller!
         HttpHeaders responseHeaders = new HttpHeaders();
-        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/users/user/{userId}")
+        URI newUserURI = ServletUriComponentsBuilder.fromUriString(httpServletRequest.getServerName() + getPort(httpServletRequest) + "/users/user/{userId}")
                                                     .buildAndExpand(newuser.getUserid())
                                                     .toUri();
         responseHeaders.setLocation(newUserURI);
@@ -86,7 +135,7 @@ public class OpenController
         {
             // return the access token
             RestTemplate restTemplate = new RestTemplate();
-            String requestURI = "http://" + httpServletRequest.getServerName() + ":" + httpServletRequest.getLocalPort() + "/login";
+            String requestURI = "http://" + httpServletRequest.getServerName() + getPort(httpServletRequest) + "/oauth/login";
 
             List<MediaType> acceptableMediaTypes = new ArrayList<>();
             acceptableMediaTypes.add(MediaType.APPLICATION_JSON);
@@ -127,5 +176,13 @@ public class OpenController
     void returnNoFavicon()
     {
         logger.trace("favicon.ico endpoint accessed!");
+    }
+
+    private String getPort(HttpServletRequest httpServletRequest) {
+        if (httpServletRequest.getServerName().equals("localhost")) {
+            return ":" + httpServletRequest.getLocalPort();
+        } else {
+            return "";
+        }
     }
 }
