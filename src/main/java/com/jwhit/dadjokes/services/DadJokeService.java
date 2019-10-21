@@ -2,6 +2,7 @@ package com.jwhit.dadjokes.services;
 
 import com.jwhit.dadjokes.models.DadJoke;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
