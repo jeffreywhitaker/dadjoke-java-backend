@@ -2,6 +2,7 @@ package com.jwhit.dadjokes.controllers;
 
 import com.jwhit.dadjokes.logging.Loggable;
 import com.jwhit.dadjokes.models.User;
+import com.jwhit.dadjokes.models.UserLogin;
 import com.jwhit.dadjokes.models.UserMinimum;
 import com.jwhit.dadjokes.models.UserRoles;
 import com.jwhit.dadjokes.services.RoleService;
@@ -43,7 +44,7 @@ public class OpenController
                                                    boolean getaccess,
                                        @Valid
                                            @RequestBody
-                                                   UserMinimum newminuser) throws URISyntaxException
+                                               UserLogin userLogin) throws URISyntaxException
     {
         RestTemplate restTemplate = new RestTemplate();
         String requestURI = "http://" + httpServletRequest.getServerName() + getPort(httpServletRequest) + "/oauth/login";
@@ -63,9 +64,9 @@ public class OpenController
         map.add("scope",
                 "read write trust");
         map.add("username",
-                newminuser.getUsername());
+                userLogin.getUsername());
         map.add("password",
-                newminuser.getPassword());
+                userLogin.getPassword());
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map,
                 headers);

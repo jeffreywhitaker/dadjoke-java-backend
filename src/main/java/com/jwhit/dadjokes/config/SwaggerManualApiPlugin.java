@@ -42,26 +42,26 @@ public class SwaggerManualApiPlugin implements ApiListingScannerPlugin
     @Override
     public List<ApiDescription> apply(DocumentationContext documentationContext)
     {
-        return new ArrayList<>(Arrays.asList(new ApiDescription(null,
-                                                                "/login",
-                                                                "login",
-                                                                Arrays.asList(new OperationBuilder(operationNames).authorizations(new ArrayList<>())
-                                                                                                                  .summary("login")
-                                                                                                                  .codegenMethodNameStem("userLogin")
-                                                                                                                  .method(HttpMethod.POST)
-                                                                                                                  .notes("This is the login endpoint to request an authentication token")
-                                                                                                                  .responseMessages(responseMessages())
-                                                                                                                  .parameters(Arrays.asList(new ParameterBuilder().description("Login Parameter")
-                                                                                                                                                                  .type(new TypeResolver().resolve(UserLogin.class))
-                                                                                                                                                                  .name("userLogin")
-                                                                                                                                                                  .parameterType("body")
-                                                                                                                                                                  .parameterAccess("access")
-                                                                                                                                                                  .required(true)
-                                                                                                                                                                  .modelRef(new ModelRef("UserLogin"))
-                                                                                                                                                                  .build()))
-                                                                                                                  .build()),
-                                                                false)));
-
+//        return new ArrayList<>(Arrays.asList(new ApiDescription(null,
+//                                                                "/login",
+//                                                                "login",
+//                                                                Arrays.asList(new OperationBuilder(operationNames).authorizations(new ArrayList<>())
+//                                                                                                                  .summary("login")
+//                                                                                                                  .codegenMethodNameStem("userLogin")
+//                                                                                                                  .method(HttpMethod.POST)
+//                                                                                                                  .notes("This is the login endpoint to request an authentication token")
+//                                                                                                                  .responseMessages(responseMessages())
+//                                                                                                                  .parameters(Arrays.asList(new ParameterBuilder().description("Login Parameter")
+//                                                                                                                                                                  .type(new TypeResolver().resolve(UserLogin.class))
+//                                                                                                                                                                  .name("userLogin")
+//                                                                                                                                                                  .parameterType("body")
+//                                                                                                                                                                  .parameterAccess("access")
+//                                                                                                                                                                  .required(true)
+//                                                                                                                                                                  .modelRef(new ModelRef("UserLogin"))
+//                                                                                                                                                                  .build()))
+//                                                                                                                  .build()),
+//                                                                false)));
+    return new ArrayList<>();
     }
 
     private Set<ResponseMessage> responseMessages()
