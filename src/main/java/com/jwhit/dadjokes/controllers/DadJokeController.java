@@ -97,4 +97,14 @@ public class DadJokeController
         dadJokeService.delete(dadjokeid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    // PUT update dad joke
+    // http://localhost:2019/dadjokes/update/{dadJokeId}
+    @PutMapping(value = "/update/{dadJokeId}", produces = {"application/json"}, consumes = {"application/json"})
+    public ResponseEntity<?> updateDadJoke(@Valid @RequestBody DadJoke dadJoke, @PathVariable long dadJokeId, Authentication authentication)
+    {
+        User thisUser = userService.findByName(authentication.getName());
+        dadJokeService.update(dadJoke, dadJokeId, thisUser);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

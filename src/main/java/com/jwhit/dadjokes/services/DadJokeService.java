@@ -1,6 +1,7 @@
 package com.jwhit.dadjokes.services;
 
 import com.jwhit.dadjokes.models.DadJoke;
+import com.jwhit.dadjokes.models.User;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 
@@ -13,4 +14,6 @@ public interface DadJokeService
     DadJoke save(DadJoke dadJoke);
 
     void delete(long id);
+
+    DadJoke update(DadJoke dadJoke, long dadjokeid, User thisUser);
 }

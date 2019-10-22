@@ -52,7 +52,7 @@ public class Swagger2Config
         return new ApiInfoBuilder().title("Dad Joke Build Week Project")
                                    .description("The only place for TOP QUALITY dad jokes!")
                                    .contact(new Contact("Jeffrey Whitaker - Backend Dev",
-                                                        "http://www.lambdaschool.com",
+                                                        "https://github.com/jeffreywhitaker",
                                                         "jeffrey.david.whitaker@zoho.com"))
                                    .license("MIT License")
                                    .licenseUrl("https://github.com/jeffreywhitaker/dadjoke-java-backend/blob/master/LICENSE")
