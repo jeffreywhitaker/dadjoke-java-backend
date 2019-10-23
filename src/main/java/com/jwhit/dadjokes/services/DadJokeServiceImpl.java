@@ -20,8 +20,12 @@ import java.util.List;
 public class DadJokeServiceImpl implements DadJokeService
 {
     // constructors
-    @Autowired
-    private DadJokeRepository dadjokerepos;
+    private final DadJokeRepository dadjokerepos;
+
+    public DadJokeServiceImpl(DadJokeRepository dadjokerepos)
+    {
+        this.dadjokerepos = dadjokerepos;
+    }
 
     // override methods
     @Override
@@ -41,9 +45,19 @@ public class DadJokeServiceImpl implements DadJokeService
 
     @Transactional
     @Override
-    public void delete(long id)
+    public void delete(long dadJokeId, User thisUser)
     {
-        dadjokerepos.deleteById(id);
+        DadJoke currentDadJoke = dadjokerepos.findById(dadJokeId)
+                .orElseThrow(() -> new ResourceNotFoundException("DadJoke ID " + dadJokeId + " not found!"));
+
+        if (thisUser.getUserid() != currentDadJoke.getUser().getUserid())
+        {
+            throw new ResourceFoundException("User Id does not match this DadJoke. Please only delete your own DadJokes.");
+        }
+        else
+        {
+            dadjokerepos.deleteById(dadJokeId);
+        }
     }
 
     @Transactional
@@ -73,9 +87,17 @@ public class DadJokeServiceImpl implements DadJokeService
 
                 return dadjokerepos.save(currentDadJoke);
             }
+    }
 
+    @Override
+    public List<DadJoke> findPrivateDadJokesByUserId(long userId, Pageable pageable)
+    {
+        return dadjokerepos.findDadJokesByIsprivateAndUser_Userid(true, userId, pageable);
+    }
 
-
-
+    @Override
+    public List<DadJoke> findPublicDadJokes(Pageable pageable)
+    {
+        return dadjokerepos.findDadJokesByIsprivate(false, pageable);
     }
 }

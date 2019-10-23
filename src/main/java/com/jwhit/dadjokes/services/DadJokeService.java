@@ -13,7 +13,11 @@ public interface DadJokeService
 
     DadJoke save(DadJoke dadJoke);
 
-    void delete(long id);
+    void delete(long id, User thisUser);
 
     DadJoke update(DadJoke dadJoke, long dadjokeid, User thisUser);
+
+    List<DadJoke> findPrivateDadJokesByUserId(long userid, Pageable pageable);
+
+    List<DadJoke> findPublicDadJokes(Pageable pageable);
 }
