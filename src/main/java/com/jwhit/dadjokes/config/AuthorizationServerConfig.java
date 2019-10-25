@@ -14,18 +14,18 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 @EnableAuthorizationServer
 public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdapter
 {
-    static final String CLIENT_ID = System.getenv("OAUTHCLIENTID"); // read from environment variable
-    static final String CLIENT_SECRET = System.getenv("OAUTHCLIENTSECRET"); // read from environment variable
+    private static final String CLIENT_ID = System.getenv("OAUTHCLIENTID"); // read from environment variable
+    private static final String CLIENT_SECRET = System.getenv("OAUTHCLIENTSECRET"); // read from environment variable
     // static final String CLIENT_ID = "lambda-client";
     // static final String CLIENT_SECRET = "lambda-secret";
 
-    static final String GRANT_TYPE_PASSWORD = "password";
-    static final String AUTHORIZATION_CODE = "authorization_code";
-    static final String IMPLICIT = "implicit";
-    static final String SCOPE_READ = "read";
-    static final String SCOPE_WRITE = "write";
-    static final String TRUST = "trust";
-    static final int ACCESS_TOKEN_VALIDITY_SECONDS = 12 * 60 * 60;
+    private static final String GRANT_TYPE_PASSWORD = "password";
+    private static final String AUTHORIZATION_CODE = "authorization_code";
+    private static final String IMPLICIT = "implicit";
+    private static final String SCOPE_READ = "read";
+    private static final String SCOPE_WRITE = "write";
+    private static final String TRUST = "trust";
+    private static final int ACCESS_TOKEN_VALIDITY_SECONDS = 12 * 60 * 60;
 
     @Autowired
     private TokenStore tokenStore;
@@ -36,6 +36,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Autowired
     private PasswordEncoder encoder;
 
+    // override methods
     @Override
     public void configure(ClientDetailsServiceConfigurer configurer) throws Exception
     {
