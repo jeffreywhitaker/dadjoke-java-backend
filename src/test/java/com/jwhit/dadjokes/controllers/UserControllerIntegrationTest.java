@@ -128,16 +128,16 @@ public class UserControllerIntegrationTest
                     .andExpect(content().string(containsString("testbarn")));
     }
 
-    @WithUserDetails("testbarn")
-    @Test
-    public void C_getUserById() throws Exception
-    {
-        this.mockMvc.perform(get("/users/user/{userid}",
-                                 14))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("testdog")));
-    }
+//    @WithUserDetails("testbarn")
+//    @Test
+//    public void C_getUserById() throws Exception
+//    {
+//        this.mockMvc.perform(get("/users/user/{userid}",
+//                                 14))
+//                    .andDo(print())
+//                    .andExpect(status().isOk())
+//                    .andExpect(content().string(containsString("testdog")));
+//    }
 
     @WithUserDetails("testbarn")
     @Test
@@ -150,15 +150,15 @@ public class UserControllerIntegrationTest
                     .andExpect(content().string(containsString("ResourceNotFoundException")));
     }
 
-    @WithUserDetails("testbarn")
+    @WithUserDetails("testuser")
     @Test
     public void D_getUserByName() throws Exception
     {
         this.mockMvc.perform(get("/users/user/name/{userName}",
-                                 "testcat"))
+                                 "testuser"))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("testcat")));
+                    .andExpect(content().string(containsString("testuser")));
     }
 
     @WithUserDetails("testbarn")
@@ -172,14 +172,14 @@ public class UserControllerIntegrationTest
                     .andExpect(content().string(containsString("ResourceNotFoundException")));
     }
 
-    @WithUserDetails("testdog")
+    @WithUserDetails("testuser")
     @Test
     public void E_getCurrentUserName() throws Exception
     {
         this.mockMvc.perform(get("/users/getusername"))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("testdog")));
+                    .andExpect(content().string(containsString("testuser")));
     }
 
     @WithUserDetails("testbarn")

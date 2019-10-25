@@ -66,7 +66,7 @@ public class UserServiceImplUnitTest
     @Test
     public void B_findUserById()
     {
-        TestCase.assertEquals("admin", userService.findUserById(4).getUsername());
+        TestCase.assertEquals("admin", userService.findUserById(1).getUsername());
     }
 
     @Test(expected = ResourceNotFoundException.class)
@@ -78,14 +78,14 @@ public class UserServiceImplUnitTest
     @Test
     public void C_findAll()
     {
-        assertEquals(5, userService.findAll(Pageable.unpaged()).size());
+        assertEquals(2, userService.findAll(Pageable.unpaged()).size());
     }
 
     @Test
     public void D_delete()
     {
-        userService.delete(13);
-        assertEquals(4, userService.findAll(Pageable.unpaged()).size());
+        userService.delete(1);
+        assertEquals(1, userService.findAll(Pageable.unpaged()).size());
     }
 
     @Test(expected = ResourceNotFoundException.class)
@@ -98,7 +98,7 @@ public class UserServiceImplUnitTest
     @Test
     public void E_findByUsername()
     {
-        TestCase.assertEquals("admin", userService.findByName("admin").getUsername());
+        TestCase.assertEquals("testuser", userService.findByName("testuser").getUsername());
     }
 
     @Test (expected = ResourceNotFoundException.class)
@@ -110,7 +110,7 @@ public class UserServiceImplUnitTest
     @Test
     public void AB_findByNameContaining()
     {
-        assertEquals(4, userService.findByNameContaining("a", Pageable.unpaged()).size());
+        assertEquals(1, userService.findByNameContaining("a", Pageable.unpaged()).size());
     }
 
     @Test
