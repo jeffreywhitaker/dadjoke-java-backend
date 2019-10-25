@@ -155,13 +155,6 @@
             <version>1.0.1</version>
         </dependency>
 
-        <!-- allows uploading a file -->
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.3.1</version>
-        </dependency>
-
     </dependencies>
 
     <build>
