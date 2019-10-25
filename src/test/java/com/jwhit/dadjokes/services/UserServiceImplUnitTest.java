@@ -1,6 +1,6 @@
 package com.jwhit.dadjokes.services;
 
-import com.jwhit.dadjokes.DadJokesTestApplication;
+import com.jwhit.dadjokes.DadJokesApplication;
 import com.jwhit.dadjokes.exceptions.ResourceFoundException;
 import com.jwhit.dadjokes.exceptions.ResourceNotFoundException;
 import com.jwhit.dadjokes.models.Role;
@@ -32,7 +32,7 @@ import static junit.framework.TestCase.assertEquals;
  */
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = DadJokesTestApplication.class)
+@SpringBootTest(classes = DadJokesApplication.class)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class UserServiceImplUnitTest
 {

@@ -1,27 +1,42 @@
 package com.jwhit.dadjokes.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.jwhit.dadjokes.DadJokesApplication;
 import com.jwhit.dadjokes.models.DadJoke;
+import com.jwhit.dadjokes.models.Role;
 import com.jwhit.dadjokes.models.User;
+import com.jwhit.dadjokes.models.UserRoles;
+import com.jwhit.dadjokes.repository.DadJokeRepository;
+import com.jwhit.dadjokes.repository.UserRepository;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.internal.matchers.LessThan;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.context.WebApplicationContext;
+
+import java.util.ArrayList;
 
 import static io.restassured.module.mockmvc.RestAssuredMockMvc.given;
 import static org.hamcrest.number.OrderingComparison.lessThan;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = DadJokesApplication.class)
+@AutoConfigureMockMvc
 public class DadJokeControllerIntegrationTest
 {
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private DadJokeRepository dadJokeRepository;
 
     @Before
     public void initialiseRestAssuredMockMvcWebApplicationContext()
@@ -42,16 +57,41 @@ public class DadJokeControllerIntegrationTest
         given().when().get("/dadjokes/private").then().time(lessThan(5000L));
     }
 
+    // test CRUD operations
     @Test
+    @WithMockUser(username = "testuser", password = "", roles = "")
     public void postNewDadJoke() throws Exception
     {
         DadJoke testDJ = new DadJoke("test dad joke part 1", "test dad joke part 2", true, null);
-        User testUser = new User("testuser", "password", "test@email.com", null);
-        testDJ.setUser(testUser);
 
         ObjectMapper mapper = new ObjectMapper();
         String stringTestDJ = mapper.writeValueAsString(testDJ);
 
         given().contentType("application/json").body(stringTestDJ).when().post("/dadjokes/add").then().statusCode(201);
+    }
+
+    @Test
+    @WithMockUser(username = "testuser", password = "", roles = "")
+    public void updateDadJokeById() throws Exception
+    {
+        DadJoke joke = dadJokeRepository.findAll().iterator().next();
+        long jokeId = joke.getDadjokeid();
+        DadJoke testDJ = new DadJoke("test dad joke part 1", "test dad joke part 2", true, null);
+        testDJ.setDadjokeid(jokeId);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String stringTestDJ = mapper.writeValueAsString(testDJ);
+
+        given().contentType("application/json").body(stringTestDJ).when().put("/dadjokes/" + jokeId).then().statusCode(200);
+    }
+
+    @Test
+    @WithMockUser(username = "testuser", password = "", roles = "")
+    public void deleteDadJokeById() throws Exception
+    {
+        DadJoke joke = dadJokeRepository.findAll().iterator().next();
+        long jokeId = joke.getDadjokeid();
+
+        given().when().delete("dadjokes/" + jokeId).then().statusCode(200);
     }
 }

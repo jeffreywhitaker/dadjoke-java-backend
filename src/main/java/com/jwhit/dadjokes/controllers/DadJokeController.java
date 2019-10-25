@@ -82,7 +82,7 @@ public class DadJokeController
     // PUT update dad joke
     // http://localhost:2019/dadjokes/{dadJokeId}
     @PutMapping(value = "/{dadJokeId}", produces = {"application/json"}, consumes = {"application/json"})
-    public ResponseEntity<?> updateDadJoke(@Valid @RequestBody DadJoke dadJoke, @PathVariable long dadJokeId, Authentication authentication)
+    public ResponseEntity<?> updateDadJokeById(@Valid @RequestBody DadJoke dadJoke, @PathVariable long dadJokeId, Authentication authentication)
     {
         User thisUser = userService.findByName(authentication.getName());
         dadJokeService.update(dadJoke, dadJokeId, thisUser);
