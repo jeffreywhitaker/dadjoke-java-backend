@@ -21,14 +21,18 @@ import java.util.List;
 @RequestMapping("/dadjokes")
 public class DadJokeController
 {
-    @Autowired
-    private DadJokeService dadJokeService;
+    // constructors
+    private final DadJokeService dadJokeService;
+    private final UserService userService;
 
-    @Autowired
-    private UserService userService;
+    public DadJokeController(DadJokeService dadJokeService, UserService userService)
+    {
+        this.dadJokeService = dadJokeService;
+        this.userService = userService;
+    }
 
     // GET all public dad jokes
-    // http://localhost:2019/dadjokes/public
+    // https://localhost:2019/dadjokes/public
     @ApiImplicitParams({
         @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", value = "Results page, 0 to N"),
         @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", value = "Number of records per page."),
@@ -42,7 +46,7 @@ public class DadJokeController
     }
 
     // GET all private dad jokes
-    // http://localhost:2019/dadjokes/private
+    // https://localhost:2019/dadjokes/private
     @ApiImplicitParams({
           @ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", value = "Results page, 0 to N"),
           @ApiImplicitParam(name = "size", dataType = "integer", paramType = "query", value = "Number of records per page."),
@@ -58,7 +62,7 @@ public class DadJokeController
     }
 
     // POST new dad joke
-    // http://localhost:2019/dadjokes/add
+    // https://localhost:2019/dadjokes/add
     @PostMapping(value = "/add", consumes = {"application/json"}, produces = {"application/json"})
     public ResponseEntity<?> postNewDadJoke(@Valid @RequestBody DadJoke newDadJoke, Authentication authentication)
     {
@@ -70,7 +74,7 @@ public class DadJokeController
     }
 
     // DEL private dad joke
-    // http://localhost:2019/dadjokes/{dadJokeId}
+    // https://localhost:2019/dadjokes/{dadJokeId}
     @DeleteMapping("/{dadJokeId}")
     public ResponseEntity<?> deleteDadJokeById(@PathVariable long dadJokeId, Authentication authentication)
     {
@@ -80,7 +84,7 @@ public class DadJokeController
     }
 
     // PUT update dad joke
-    // http://localhost:2019/dadjokes/{dadJokeId}
+    // https://localhost:2019/dadjokes/{dadJokeId}
     @PutMapping(value = "/{dadJokeId}", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<?> updateDadJokeById(@Valid @RequestBody DadJoke dadJoke, @PathVariable long dadJokeId, Authentication authentication)
     {

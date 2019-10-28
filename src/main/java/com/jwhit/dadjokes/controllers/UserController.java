@@ -32,8 +32,13 @@ public class UserController
 {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Autowired
-    private UserService userService;
+    // constructors
+    private final UserService userService;
+
+    public UserController(UserService userService)
+    {
+        this.userService = userService;
+    }
 
     // http://localhost:2019/users/users/?page=1&size=1
     // http://localhost:2019/users/users/?sort=username,desc&sort=<field>,asc

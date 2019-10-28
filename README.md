@@ -49,9 +49,9 @@ returns:
 ```
 
 ## [GET] all PUBLIC dadjokes
-http://jwhit-dadjokes.herokuapp.com/dadjokes/public?size=1000&page=0&sort=dadjokeid,desc
+https://jwhit-dadjokes.herokuapp.com/dadjokes/public?size=1000&page=0&sort=dadjokeid,desc
 ## [GET] all PRIVATE dadjokes
-http://jwhit-dadjokes.herokuapp.com/dadjokes/private?size=1000&page=0&sort=dadjokeid,desc
+https://jwhit-dadjokes.herokuapp.com/dadjokes/private?size=1000&page=0&sort=dadjokeid,desc
 * (endpoint is pageable, sortable, and sizeable by using the query params in the URL)
 
 ```
