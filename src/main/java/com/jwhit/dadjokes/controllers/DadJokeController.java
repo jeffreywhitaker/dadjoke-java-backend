@@ -88,8 +88,13 @@ public class DadJokeController
     @PutMapping(value = "/{dadJokeId}", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<?> updateDadJokeById(@Valid @RequestBody DadJoke dadJoke, @PathVariable long dadJokeId, Authentication authentication)
     {
-        User thisUser = userService.findByName(authentication.getName());
-        dadJokeService.update(dadJoke, dadJokeId, thisUser);
+        try {
+            User thisUser = userService.findByName(authentication.getName());
+            dadJokeService.update(dadJoke, dadJokeId, thisUser);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

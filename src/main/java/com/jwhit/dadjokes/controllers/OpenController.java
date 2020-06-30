@@ -7,6 +7,7 @@ import com.jwhit.dadjokes.models.UserMinimum;
 import com.jwhit.dadjokes.models.UserRoles;
 import com.jwhit.dadjokes.services.RoleService;
 import com.jwhit.dadjokes.services.UserService;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,10 +75,17 @@ public class OpenController
         logger.info("Requesting token from " + requestURI);
 
         String theToken = "";
-        theToken = restTemplate.postForObject(requestURI,
-                request,
-                String.class);
-
+        try {
+            theToken = restTemplate.postForObject(requestURI,
+                    request,
+                    String.class);
+        } catch (Exception ex) {
+            JSONObject err = new JSONObject();
+            err.put("error", "invalid username or password");
+            return new ResponseEntity<>(err.toString(),
+                    HttpStatus.BAD_REQUEST);
+        }
+        logger.info(theToken);
         return new ResponseEntity<>(theToken,
                 HttpStatus.OK);
     }

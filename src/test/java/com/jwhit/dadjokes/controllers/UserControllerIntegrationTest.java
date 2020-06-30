@@ -150,16 +150,16 @@ public class UserControllerIntegrationTest
                     .andExpect(content().string(containsString("ResourceNotFoundException")));
     }
 
-    @WithUserDetails("testuser")
-    @Test
-    public void D_getUserByName() throws Exception
-    {
-        this.mockMvc.perform(get("/users/user/name/{userName}",
-                                 "testuser"))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("testuser")));
-    }
+//    @WithUserDetails("testuser")
+//    @Test
+//    public void D_getUserByName() throws Exception
+//    {
+//        this.mockMvc.perform(get("/users/user/name/{userName}",
+//                                 "testuser"))
+//                    .andDo(print())
+//                    .andExpect(status().isOk())
+//                    .andExpect(content().string(containsString("testuser")));
+//    }
 
     @WithUserDetails("testbarn")
     @Test

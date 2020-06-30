@@ -3,6 +3,18 @@ by Jeffrey Whitaker (https://github.com/jeffreywhitaker)
 
  2) swagger documentation: http://jwhit-dadjokes.herokuapp.com/swagger-ui.html
  3) -- Primary Endpoints Below --
+ 
+## Setup
+Make a configuration using template "SpringBoot" with MainClass com.jwhit.dadjokes.DadJokesApplication
+
+Set environment variables
+* OAUTHCLIENTID
+* OAUTHCLIENTSECRET
+* MYDBHOST
+* MYDBPASSWORD
+* MYDBUSER
+
+Starts on port 2019 by default http://localhost:2019/swagger-ui.html
 
 ## [POST] registration endpoint
 https://jwhit-dadjokes.herokuapp.com/createnewuser

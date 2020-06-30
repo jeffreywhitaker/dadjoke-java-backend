@@ -1,5 +1,7 @@
 package com.jwhit.dadjokes.config;
 
+import com.jwhit.dadjokes.handlers.RestAccessDeniedHandler;
+import com.jwhit.dadjokes.handlers.RestAuthenticationFailureHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 import javax.annotation.Resource;
 
@@ -49,5 +53,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     public PasswordEncoder encoder()
     {
         return new BCryptPasswordEncoder();
+    }
+
+    /**
+     * @return Custom {@link AuthenticationFailureHandler} to send suitable response to REST clients in the event of a
+     *         failed authentication attempt.
+     */
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler()
+    {
+        return new RestAuthenticationFailureHandler();
+    }
+
+    /**
+     * @return Custom {@link AccessDeniedHandler} to send suitable response to REST clients in the event of an attempt to
+     *         access resources to which the user has insufficient privileges.
+     */
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler()
+    {
+        return new RestAccessDeniedHandler();
     }
 }
