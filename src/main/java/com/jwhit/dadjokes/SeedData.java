@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 
 @Transactional
-@Component
+// @Component
 public class SeedData implements CommandLineRunner
 {
     @Autowired
@@ -29,6 +29,7 @@ public class SeedData implements CommandLineRunner
     @Override
     public void run(String[] args) throws Exception
     {
+        System.out.println("SEED DATA!");
         Role r1 = new Role("admin");
         Role r2 = new Role("user");
         Role r3 = new Role("data");

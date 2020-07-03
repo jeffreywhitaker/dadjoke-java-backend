@@ -1,5 +1,6 @@
 package com.jwhit.dadjokes.controllers;
 
+import com.jwhit.dadjokes.dtos.DadJokeDTO;
 import com.jwhit.dadjokes.models.DadJoke;
 import com.jwhit.dadjokes.models.User;
 import com.jwhit.dadjokes.services.DadJokeService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/dadjokes")
@@ -31,6 +33,18 @@ public class DadJokeController
         this.userService = userService;
     }
 
+    // helper function to get only the desired fields
+    private DadJokeDTO mapFunction(DadJoke dadJoke)
+    {
+        DadJokeDTO dto = new DadJokeDTO();
+        dto.dadjokeanswer = dadJoke.getDadjokeanswer();
+        dto.dadjokequestion = dadJoke.getDadjokequestion();
+        dto.dadjokeid = dadJoke.getDadjokeid();
+        dto.username = dadJoke.getUser().getUsername();
+
+        return dto;
+    }
+
     // GET all public dad jokes
     // https://localhost:2019/dadjokes/public
     @ApiImplicitParams({
@@ -41,7 +55,9 @@ public class DadJokeController
     @GetMapping(value = "/public", produces = {"application/json"})
     public ResponseEntity<?> getAllPublicDadJokes(@PageableDefault(page = 0, size = 20)Pageable pageable)
     {
-        List<DadJoke> rtnList = dadJokeService.findPublicDadJokes(pageable);
+        List<DadJoke> originalList = dadJokeService.findPublicDadJokes(pageable);
+        List<DadJokeDTO> rtnList = originalList.stream().map(this::mapFunction).collect(Collectors.toList());
+
         return new ResponseEntity<>(rtnList, HttpStatus.OK);
     }
 
@@ -56,7 +72,8 @@ public class DadJokeController
     public ResponseEntity<?> getAllPrivateDadJokes(@PageableDefault(page = 0, size = 20)Pageable pageable, Authentication authentication)
     {
         User thisUser = userService.findByName(authentication.getName());
-        List<DadJoke> rtnList = dadJokeService.findPrivateDadJokesByUserId(thisUser.getUserid(), pageable);
+        List<DadJoke> originalList = dadJokeService.findPrivateDadJokesByUserId(thisUser.getUserid(), pageable);
+        List<DadJokeDTO> rtnList = originalList.stream().map(this::mapFunction).collect(Collectors.toList());
 
         return new ResponseEntity<>(rtnList, HttpStatus.OK);
     }
@@ -70,7 +87,9 @@ public class DadJokeController
         newDadJoke.setUser(thisUser);
         DadJoke createdJoke = dadJokeService.save(newDadJoke);
 
-        return new ResponseEntity<>(createdJoke, HttpStatus.CREATED);
+        DadJokeDTO rtnJoke = mapFunction(createdJoke);
+
+        return new ResponseEntity<>(rtnJoke, HttpStatus.CREATED);
     }
 
     // DEL private dad joke
@@ -90,6 +109,9 @@ public class DadJokeController
     {
         User thisUser = userService.findByName(authentication.getName());
         DadJoke updatedJoke = dadJokeService.update(dadJoke, dadJokeId, thisUser);
-        return new ResponseEntity<>(updatedJoke, HttpStatus.OK);
+
+        DadJokeDTO rtnJoke = mapFunction(updatedJoke);
+
+        return new ResponseEntity<>(rtnJoke, HttpStatus.OK);
     }
 }
