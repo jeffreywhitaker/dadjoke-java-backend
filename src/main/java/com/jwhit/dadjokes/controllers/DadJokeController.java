@@ -39,7 +39,7 @@ public class DadJokeController
         @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
                           value = "Sorting criteria in format: property(,asc|desc)." + "Default sort is ascending." + "Multiple sort criteria are supported")})
     @GetMapping(value = "/public", produces = {"application/json"})
-    public ResponseEntity<?> getAllPublicDadJokes(@PageableDefault(page = 0, size = 3)Pageable pageable)
+    public ResponseEntity<?> getAllPublicDadJokes(@PageableDefault(page = 0, size = 20)Pageable pageable)
     {
         List<DadJoke> rtnList = dadJokeService.findPublicDadJokes(pageable);
         return new ResponseEntity<>(rtnList, HttpStatus.OK);
@@ -53,7 +53,7 @@ public class DadJokeController
           @ApiImplicitParam(name = "sort", allowMultiple = true, dataType = "string", paramType = "query",
                             value = "Sorting criteria in format: property(,asc|desc)." + "Default sort is ascending." + "Multiple sort criteria are supported")})
     @GetMapping(value = "/private", produces = {"application/json"})
-    public ResponseEntity<?> getAllPrivateDadJokes(@PageableDefault(page = 0, size = 3)Pageable pageable, Authentication authentication)
+    public ResponseEntity<?> getAllPrivateDadJokes(@PageableDefault(page = 0, size = 20)Pageable pageable, Authentication authentication)
     {
         User thisUser = userService.findByName(authentication.getName());
         List<DadJoke> rtnList = dadJokeService.findPrivateDadJokesByUserId(thisUser.getUserid(), pageable);
@@ -68,9 +68,9 @@ public class DadJokeController
     {
         User thisUser = userService.findByName(authentication.getName());
         newDadJoke.setUser(thisUser);
-        dadJokeService.save(newDadJoke);
+        DadJoke createdJoke = dadJokeService.save(newDadJoke);
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return new ResponseEntity<>(createdJoke, HttpStatus.CREATED);
     }
 
     // DEL private dad joke
@@ -88,13 +88,8 @@ public class DadJokeController
     @PutMapping(value = "/{dadJokeId}", produces = {"application/json"}, consumes = {"application/json"})
     public ResponseEntity<?> updateDadJokeById(@Valid @RequestBody DadJoke dadJoke, @PathVariable long dadJokeId, Authentication authentication)
     {
-        try {
-            User thisUser = userService.findByName(authentication.getName());
-            dadJokeService.update(dadJoke, dadJokeId, thisUser);
-        } catch (Exception e) {
-            System.out.println(e);
-        }
-
-        return new ResponseEntity<>(HttpStatus.OK);
+        User thisUser = userService.findByName(authentication.getName());
+        DadJoke updatedJoke = dadJokeService.update(dadJoke, dadJokeId, thisUser);
+        return new ResponseEntity<>(updatedJoke, HttpStatus.OK);
     }
 }
